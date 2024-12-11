@@ -13,6 +13,8 @@ public class UserInterface {
         this.fileDirectory = new FileDirectory(studentController);
     }
     public void runStudentPoster() {
+        // Ladda alla studenter som finns
+        fileDirectory.loadStudentId();
         loadAllStudents();
         System.out.println("Hey what would you like to do?");
         systemOptions();
@@ -56,31 +58,35 @@ public class UserInterface {
 
     private void loadAllStudents(){
         fileDirectory.loadAllStudents();
-//        fileDirectory.readStudentsFromFile(studentController.getStudents());
     }
 
     private void addStudent() {
-        System.out.println("Enter student Id");
-        int studentId = sc.nextInt();
-        sc.nextLine();
         System.out.println("Enter student name: ");
         String studentName = sc.nextLine();
         System.out.println("Enter student last name: ");
         String studentLastName = sc.nextLine();
         System.out.println("Enter student grade: ");
         String studentGrade = sc.nextLine();
-        studentController.addStudent(new Student(studentId, studentName, studentLastName, studentGrade));
-        System.out.println("New student added");
-        saveStudentPoster();
+
+        Student student = new Student(0, studentName, studentLastName, studentGrade);
+
+        studentController.addStudent(student);
+        System.out.println("New student added with id " + student.getStudentId());
+        fileDirectory.addStudentToFile(student);
+    }
+
+    private void validateId(){
+        System.out.println("test");
     }
 
     // Metod för att söka efter en specifik student med hjälp av Student-ID
     private void searchForStudent() {
         System.out.println("Enter student ID");
         int studentId = sc.nextInt();
+        sc.nextLine();
+
         Student student = studentController.getStudent(studentId);
         if(student != null){
-
             System.out.println("Student: " + student);
         }
         else{
@@ -93,10 +99,10 @@ public class UserInterface {
         System.out.println("Display all saved students");
     }
 
-    private void saveStudentPoster() {
-        System.out.println("Save Student Poster to a File");
-        fileDirectory.addStudentToFile(studentController.getStudents());
-    }
+//    private void saveStudentPoster() {
+//        System.out.println("Save Student Poster to a File");
+//        fileDirectory.addStudentToFile(studentController.getStudents());
+//    }
 
     private void readStudentPoster() {
         System.out.println("Read Student Poster from a File");

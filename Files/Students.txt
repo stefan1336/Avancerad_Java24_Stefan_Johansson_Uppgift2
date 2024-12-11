@@ -1,1 +1,2 @@
-ID: 1,  Student name: Stefan Johansson,Grade: g
+ID: 1,  Student name: stefan joh,Grade: g
+ID: 2,  Student name: agge king,Grade: vg
