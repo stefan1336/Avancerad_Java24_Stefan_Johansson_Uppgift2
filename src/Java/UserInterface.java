@@ -15,7 +15,7 @@ public class UserInterface {
     public void runStudentPoster() {
         // Ladda alla studenter som finns
         fileDirectory.loadStudentId();
-        loadAllStudents();
+//        loadAllStudents();
         System.out.println("Hey what would you like to do?");
         systemOptions();
         sc.close();
@@ -25,8 +25,7 @@ public class UserInterface {
         System.out.println("1. Add new student");
         System.out.println("2. Search for a student");
         System.out.println("3. Display all students");
-        System.out.println("4. Read Student Poster from a File");
-        System.out.println("5. Exit");
+        System.out.println("4. Exit");
         userAnswer();
     }
 
@@ -39,20 +38,16 @@ public class UserInterface {
                 break;
                 case "2":
                     searchForStudent();
-                    System.out.println("Search for a student");
                     break;
                     case "3":
-                        displaySavedStudents();
+                        displayStudentPoster();
                         break;
                             case "4":
-                                readStudentPoster();
+                                exitProgram();
                                 break;
-                                case "5":
-                                    exitProgram();
-                                    break;
                                     default:
-                                        System.out.println("Invalid option");
-                                        userAnswer(); // Kunna köra programmet igen om man skriver in fel
+                                        System.out.println("Invalid answer, im asking you again. What would you like to do?");
+                                        systemOptions();
         }
     }
 
@@ -71,22 +66,22 @@ public class UserInterface {
         Student student = new Student(0, studentName, studentLastName, studentGrade);
 
         studentController.addStudent(student);
-        System.out.println("New student added with id " + student.getStudentId());
+        System.out.println("New student added with ID: " + student.getStudentId());
         fileDirectory.addStudentToFile(student);
-    }
-
-    private void validateId(){
-        System.out.println("test");
+        continueAddingStudent();
     }
 
     // Metod för att söka efter en specifik student med hjälp av Student-ID
     private void searchForStudent() {
-        System.out.println("Enter student ID");
+        System.out.println("Enter wanted student ID");
         int studentId = sc.nextInt();
         sc.nextLine();
 
         Student student = studentController.getStudent(studentId);
+        System.out.println("Available IDs in the map: " + studentController.getStudents().keySet());
+        System.out.println("Student ID searched: " + studentId);
         if(student != null){
+            System.out.println(student.getStudentFirstName());
             System.out.println("Student: " + student);
         }
         else{
@@ -94,39 +89,34 @@ public class UserInterface {
         }
     }
 
-    private void displaySavedStudents() {
-        studentController.showStudents();
-        System.out.println("Display all saved students");
-    }
-
-//    private void saveStudentPoster() {
-//        System.out.println("Save Student Poster to a File");
-//        fileDirectory.addStudentToFile(studentController.getStudents());
-//    }
-
-    private void readStudentPoster() {
-        System.out.println("Read Student Poster from a File");
+    // Metod för att kunna läsa alla studenter från Filen
+    private void displayStudentPoster() {
+//        studentController.showStudents();
         fileDirectory.readStudentsFromFile(studentController.getStudents());
+        continueAddingStudent();
     }
 
+    // Metod för att stänga programmet
     private void exitProgram() {
         System.out.println("Exit");
         sc.close();
         System.exit(0);
     }
 
+    // Metod för att kunna fortsätta lägga till studenter
     private void continueAddingStudent() {
         System.out.println("Do you want to continue? or do you want to exit");
         System.out.println("Type c if you want to continue or e if you want to close the program");
         String userAnswer = sc.nextLine();
-        if(userAnswer.equals("c")){
-            systemOptions();
-        }
-        else if(userAnswer.equals("e")){
-            exitProgram();
-        }
-        else{
-            System.out.println("Invalid option");
-        }
+            if(userAnswer.equalsIgnoreCase("c")){
+                systemOptions();
+            }
+            else if(userAnswer.equalsIgnoreCase("e")){
+                exitProgram();
+            }
+            else{
+                System.out.println("Invalid option, im asking you again");
+                continueAddingStudent();
+            }
     }
 }

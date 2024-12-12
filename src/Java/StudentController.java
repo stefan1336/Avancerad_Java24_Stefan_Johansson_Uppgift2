@@ -33,19 +33,20 @@ public class StudentController {
         nextId++;
         // Spara nästa id som ska användas till nästa student
         fileDirectory.saveNextStudentId(nextId);
+        System.out.println("Student till hashmap " + student);
     }
 
     // Metod för att displaya alla studenter
-    public void showStudents(){
-        if(students.isEmpty()){
-            System.out.println("No students found");
-        }
-        else{
-            for(Student student : students.values()){
-                System.out.println(student);
-            }
-        }
-    }
+//    public void showStudents(){
+//        if(students.isEmpty()){
+//            System.out.println("No students found");
+//        }
+//        else{
+//            for(Student student : students.values()){
+//                System.out.println(student);
+//            }
+//        }
+//    }
 
     // Metod för att söka efter en student efter Id
     public Student getStudent(int studentId){

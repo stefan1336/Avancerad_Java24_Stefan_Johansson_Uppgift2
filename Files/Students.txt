@@ -1,2 +1,8 @@
-ID: 1,  Student name: stefan joh,Grade: g
-ID: 2,  Student name: agge king,Grade: vg
+ID: 1,  Student name: stefan ett,Grade: g
+ID: 2,  Student name: agnes två,Grade: mvg
+ID: 3,  Student name: steffe king,Grade: g
+ID: 4,  Student name: mange boy,Grade: g
+ID: 5,  Student name: ytix johansson,Grade: vg
+ID: 6,  Student name: agge king,Grade: mvg
+ID: 7,  Student name: agge majs,Grade: h
+ID: 8,  Student name: Emil 55,Grade: mvg+
