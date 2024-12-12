@@ -40,32 +40,40 @@ public class FileDirectory {
             String fullInfo;
             while((fullInfo = bufferedReader.readLine()) != null){
                 String[] studentInfo = fullInfo.split(",");
-//                System.out.println("line = " + line);
-
                 if(studentInfo.length >= 3){
                     System.out.println(fullInfo);
-//                    try{
-//                        int studentID = Integer.parseInt(studentInfo[0].split(":")[1].trim());
-//                        String firstName = studentInfo[1].split(":")[1].trim();
-//                        String lastName = studentInfo[2].split(":")[1].trim();
-//                        String grade = studentInfo[3].split(":")[1].trim();
-//
-//                        if(!students.containsKey(studentID)){
-//                            Student student = new Student(studentID, firstName, lastName, grade);
-//                            students.put(studentID, student);
-//                        }
-//                        else{
-//                            System.out.println("Wanted ID dont exist");
-//                        }
-//                    }
-//                    catch(Exception e){
-//
-////                        System.out.println("Error, cant read students from file");
-//                    }
                 }
             }
         }
         catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void loadAllStudents(HashMap<Integer, Student> students) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Files/Students.txt"))) {
+            String fullInfo;
+            while ((fullInfo = bufferedReader.readLine()) != null) {
+                String[] studentInfo = fullInfo.split(",");
+
+                if (studentInfo.length == 3) {
+                    try {
+
+                        int studentID = Integer.parseInt(studentInfo[0].split(":")[1].trim());
+                        String firstName = studentInfo[1].split(":")[1].trim().split(" ")[0];
+                        String lastName = studentInfo[1].split(":")[1].trim().split(" ")[1];
+                        String grade = studentInfo[2].split(":")[1].trim();
+
+                        Student student = new Student(studentID, firstName, lastName, grade);
+                        students.put(studentID, student);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Invalid student data: " + fullInfo);
+                }
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -96,39 +104,39 @@ public class FileDirectory {
 //        return null;
 //    }
 
-    public void loadAllStudents(){
-        File file = new File("Files/Students.txt");
-        if (file.exists()) {
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-                String line;
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    String[] studentInfo = line.split(",");
-                    if (studentInfo.length >= 3) {
-                        try {
-                            int studentID = Integer.parseInt(studentInfo[0].split(":")[1].trim());
-                            String firstName = studentInfo[1].split(":")[1].trim();
-                            String lastName = studentInfo[2].split(":")[1].trim();
-                            String grade = studentInfo[3].split(":")[1].trim();
-
-                            if(!studentController.getStudents().containsKey(studentID)){
-                            Student student = new Student(studentID, firstName, lastName, grade);
-                            studentController.addStudent(student);
-                            }
-
-                        } catch (Exception e) {
-                            System.out.println("Error reading students from file");
-                        }
-                    }
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("There are no current students in the file.");
-        }
-    }
+//    public void loadAllStudents(){
+//        File file = new File("Files/Students.txt");
+//        if (file.exists()) {
+//            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+//                String line;
+//
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    String[] studentInfo = line.split(",");
+//                    if (studentInfo.length >= 3) {
+//                        try {
+//                            int studentID = Integer.parseInt(studentInfo[0].split(":")[1].trim());
+//                            String firstName = studentInfo[1].split(":")[1].trim();
+//                            String lastName = studentInfo[2].split(":")[1].trim();
+//                            String grade = studentInfo[3].split(":")[1].trim();
+//
+//                            if(!studentController.getStudents().containsKey(studentID)){
+//                            Student student = new Student(studentID, firstName, lastName, grade);
+//                            studentController.addStudent(student);
+//                            }
+//
+//                        } catch (Exception e) {
+//                            System.out.println("Error reading students from file");
+//                        }
+//                    }
+//
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            System.out.println("There are no current students in the file.");
+//        }
+//    }
 
     public void saveNextStudentId(int nextId){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Files/NextStudentId.txt"))) {

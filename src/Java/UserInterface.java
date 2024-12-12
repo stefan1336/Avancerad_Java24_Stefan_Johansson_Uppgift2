@@ -41,6 +41,7 @@ public class UserInterface {
                     break;
                     case "3":
                         displayStudentPoster();
+                        continueAddingStudent();
                         break;
                             case "4":
                                 exitProgram();
@@ -52,7 +53,7 @@ public class UserInterface {
     }
 
     private void loadAllStudents(){
-        fileDirectory.loadAllStudents();
+        fileDirectory.loadAllStudents(studentController.getStudents());
     }
 
     private void addStudent() {
@@ -73,16 +74,19 @@ public class UserInterface {
 
     // Metod för att söka efter en specifik student med hjälp av Student-ID
     private void searchForStudent() {
+        // ladda studenterna
+        loadAllStudents();
+        System.out.println("This is all students");
+        // Displayar studenterna
+        displayStudentPoster();
         System.out.println("Enter wanted student ID");
         int studentId = sc.nextInt();
         sc.nextLine();
 
         Student student = studentController.getStudent(studentId);
-        System.out.println("Available IDs in the map: " + studentController.getStudents().keySet());
-        System.out.println("Student ID searched: " + studentId);
+
         if(student != null){
-            System.out.println(student.getStudentFirstName());
-            System.out.println("Student: " + student);
+            System.out.println("Student Name " + student.getStudentFirstName() + " " + student.getStudentLastName() + " Current grade " + student.getStudentGrade());
         }
         else{
             System.out.println("Student not found");
@@ -91,9 +95,7 @@ public class UserInterface {
 
     // Metod för att kunna läsa alla studenter från Filen
     private void displayStudentPoster() {
-//        studentController.showStudents();
         fileDirectory.readStudentsFromFile(studentController.getStudents());
-        continueAddingStudent();
     }
 
     // Metod för att stänga programmet

@@ -6,3 +6,7 @@ ID: 5,  Student name: ytix johansson,Grade: vg
 ID: 6,  Student name: agge king,Grade: mvg
 ID: 7,  Student name: agge majs,Grade: h
 ID: 8,  Student name: Emil 55,Grade: mvg+
+ID: 9,  Student name: hej hej,Grade: g
+ID: 10,  Student name: mange persson,Grade: g
+ID: 11,  Student name: fille b,Grade: g
+ID: 12,  Student name: max jarmo,Grade: mvg
