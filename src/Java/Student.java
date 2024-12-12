@@ -30,24 +30,13 @@ public class Student {
         return studentFirstName;
     }
 
-    public void setStudentFirstName(String studentFirstName) {
-        this.studentFirstName = studentFirstName;
-    }
-
     public String getStudentLastName() {
         return studentLastName;
-    }
-
-    public void setStudentLastName(String studentLastName) {
-        this.studentLastName = studentLastName;
     }
 
     public String getStudentGrade() {
         return studentGrade;
     }
 
-    public void setStudentGrade(String studentGrade) {
-        this.studentGrade = studentGrade;
-    }
 }
 

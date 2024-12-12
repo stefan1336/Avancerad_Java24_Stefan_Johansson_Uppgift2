@@ -11,31 +11,8 @@ public class FileDirectory {
         this.studentController = studentController;
     }
 
-    // Lägg till en ny student till Filen med alla studenter med diverse information
-    public void addStudentToFile(Student student) {
-        try{
-            File fileDirectory = new File("Files");
-            if(!fileDirectory.exists()){
-                fileDirectory.mkdir();
-            }
-
-            File file = new File(fileDirectory, "Students.txt");
-            // För att inte skriva över studenten
-            try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))) {
-                bufferedWriter.write("ID: " + student.getStudentId() + ", " +" Student name: " + student.getStudentFirstName() + " " + student.getStudentLastName() + "," + "Grade: " + student.getStudentGrade());
-                bufferedWriter.newLine();
-            }
-                // Ha kvar?
-//            bufferedWriter.close();
-            System.out.println("Saved new Student to file");
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
-    public void readStudentsFromFile(HashMap<Integer, Student> students) {
+    // Metod för att printa ut studenterna från Filen.
+    public void printStudentsFromFile(HashMap<Integer, Student> students) {
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader("Files/Students.txt"))) {
             String fullInfo;
             while((fullInfo = bufferedReader.readLine()) != null){
@@ -50,7 +27,8 @@ public class FileDirectory {
         }
     }
 
-    public void loadAllStudents(HashMap<Integer, Student> students) {
+    // Metod för att ladda studenterna till en lista
+    public void loadStudents(HashMap<Integer, Student> students) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Files/Students.txt"))) {
             String fullInfo;
             while ((fullInfo = bufferedReader.readLine()) != null) {
@@ -58,7 +36,6 @@ public class FileDirectory {
 
                 if (studentInfo.length == 3) {
                     try {
-
                         int studentID = Integer.parseInt(studentInfo[0].split(":")[1].trim());
                         String firstName = studentInfo[1].split(":")[1].trim().split(" ")[0];
                         String lastName = studentInfo[1].split(":")[1].trim().split(" ")[1];
@@ -75,69 +52,11 @@ public class FileDirectory {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("test två");
         }
     }
 
-// kanske använd
-//    private Student parseStudent(String line){
-//        try{
-//            String[] studentInfo = line.split(",");
-//            if(studentInfo.length >= 3){
-//                String id = studentInfo[0].trim();
-//                String fullName = studentInfo[1].trim();
-//                String studentGrade = studentInfo[2].trim();
-//
-//                int studentID = Integer.parseInt(id.split(":")[1].trim());
-//                String[] name = fullName.split(":")[1].trim().split(" ");
-//                String firstName = name[0].trim();
-//                String lastName = name[1].trim();
-//                String grade = studentGrade.split(":")[1].trim();
-//
-//                return new Student(studentID, firstName, lastName, grade);
-//            }
-//
-//        }
-//        catch(Exception e){
-//            System.out.println("Cant parse line");
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-//    public void loadAllStudents(){
-//        File file = new File("Files/Students.txt");
-//        if (file.exists()) {
-//            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-//                String line;
-//
-//                while ((line = bufferedReader.readLine()) != null) {
-//                    String[] studentInfo = line.split(",");
-//                    if (studentInfo.length >= 3) {
-//                        try {
-//                            int studentID = Integer.parseInt(studentInfo[0].split(":")[1].trim());
-//                            String firstName = studentInfo[1].split(":")[1].trim();
-//                            String lastName = studentInfo[2].split(":")[1].trim();
-//                            String grade = studentInfo[3].split(":")[1].trim();
-//
-//                            if(!studentController.getStudents().containsKey(studentID)){
-//                            Student student = new Student(studentID, firstName, lastName, grade);
-//                            studentController.addStudent(student);
-//                            }
-//
-//                        } catch (Exception e) {
-//                            System.out.println("Error reading students from file");
-//                        }
-//                    }
-//
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.out.println("There are no current students in the file.");
-//        }
-//    }
-
+    // Metod för att spara nästa student ID för att nästa student ska få rätt ID
     public void saveNextStudentId(int nextId){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Files/NextStudentId.txt"))) {
             writer.write(String.valueOf(nextId));
@@ -146,63 +65,69 @@ public class FileDirectory {
         }
     }
 
-    public void loadNextStudentId() {
-        ensureFileExist();
-        
+    // Metod för att läsa av ID från Filen NextStudentId
+    public int loadNextStudentId() {
+        existingFile();
         try (BufferedReader reader = new BufferedReader(new FileReader("Files/NextStudentId.txt"))) {
-                String id = reader.readLine();
-                if (id != null) {
-                    studentController.setNextId(Integer.parseInt(id));
-                }
-
+                String line = reader.readLine();
+                // Tenary operation för enklare sätt att använda if-else(Om line inte är null, parsa och returnera värdet, annars skicka tillbaka 1;
+                return line != null ? Integer.parseInt(line) : 1;
         } catch (IOException e) {
-            studentController.setNextId(1);
+            e.printStackTrace();
+            return 1;
         }
     }
 
-    private void ensureFileExist() {
+    // Metod för att spara studenterna till Filen Students
+    public void saveStudentFile(HashMap<Integer, Student> students) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Files/Students.txt"))) {
+            for(Student student : studentController.getStudents().values()){
+                writer.write("ID: " + student.getStudentId() + ", " +
+                        "Student name: " + student.getStudentFirstName() + " " + student.getStudentLastName() + ", " +
+                        "Grade: " + student.getStudentGrade());
+                writer.newLine();
+            }
+            System.out.println("Update have been made");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Metod för att kolla om Filerna finns
+    private void existingFile() {
         File directory = new File("Files");
         if (!directory.exists()) {
             directory.mkdir();
-            System.out.println("Directory 'Files' created.");
         }
+        createStudentFile(directory);
+        createNextStudentIdFile(directory);
+    }
 
+    // Metod för att skapa studentfilen
+    private void createStudentFile(File directory) {
+        File studentFile = new File(directory, "Students.txt");
+        if (!studentFile.exists()) {
+            try{
+                studentFile.createNewFile();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // metod för att skapa studentID filen
+    private void createNextStudentIdFile(File directory) {
         File studentIdFile = new File(directory, "NextStudentId.txt");
         if (!studentIdFile.exists()) {
             try {
                 studentIdFile.createNewFile();
-                System.out.println("File 'NextStudentId.txt' created.");
-
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(studentIdFile))) {
                     writer.write("1");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public void loadStudentId(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("Files/NextStudentId.txt"))) {
-            String id = reader.readLine();
-            if (id != null) {
-                studentController.setNextId(Integer.parseInt(id));
-            }
-        } catch (IOException e) {
-            studentController.setNextId(1);
-        }
-    }
-
-    public void saveStudentFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Files/Students.txt"))) {
-        for(Student students : studentController.getStudents().values()){
-            writer.write("ID: " + students.getStudentId() + ", " +
-                    "Student name: " + students.getStudentFirstName() + " " + students.getStudentLastName() + ", " +
-                    "Grade: " + students.getStudentGrade());
-            writer.newLine();
-        }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }
