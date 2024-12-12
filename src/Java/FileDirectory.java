@@ -192,4 +192,17 @@ public class FileDirectory {
             studentController.setNextId(1);
         }
     }
+
+    public void saveStudentFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Files/Students.txt"))) {
+        for(Student students : studentController.getStudents().values()){
+            writer.write("ID: " + students.getStudentId() + ", " +
+                    "Student name: " + students.getStudentFirstName() + " " + students.getStudentLastName() + ", " +
+                    "Grade: " + students.getStudentGrade());
+            writer.newLine();
+        }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

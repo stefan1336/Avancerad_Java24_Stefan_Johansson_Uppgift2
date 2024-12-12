@@ -103,6 +103,7 @@ public class UserInterface {
         System.out.println("Exit");
         sc.close();
         System.exit(0);
+        // Här ska allt sparas samt här ska filen uppdateras
     }
 
     // Metod för att kunna fortsätta lägga till studenter
